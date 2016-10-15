@@ -1,7 +1,10 @@
 var express = require("express"),
     bodyParser = require("body-parser"),
     app = express(),
-    pg = require("pg");
+    pg = require("pg"),
+    coffee = require('coffee-script/register');
+
+var helpers = new require('./helpers/helpers.js.coffee')
 
 var dontEnv = require('dotenv').config();
 
@@ -40,7 +43,7 @@ app.post("/extractors", function(req, res){
 	    if(err) {
 	      return console.error('error running query', err);
 	    }
-	    console.log(result.rows);
+	    helpers._process(result.rows[0]);
 	    //output: 1
 	  });
 	});
@@ -49,8 +52,6 @@ app.post("/extractors", function(req, res){
 	  console.error('idle client error', err.message, err.stack)
 	});
 });
-
-
 
 app.listen(3000, function(){
   console.log("App is listing at port");
