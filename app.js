@@ -13,6 +13,10 @@ app.get("/", function(req,res){
   res.render("index")
 });
 
+app.post("/extractors", function(req, res){
+  console.log(req.body)
+});
+
 app.listen(3000, function(){
   console.log("App is listing at port");
 });
