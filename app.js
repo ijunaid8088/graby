@@ -47,7 +47,6 @@ app.post("/extractors", function(req, res){
 	    //output: 1
 	  });
 	});
-
 	pool.on('error', function (err, client) {
 	  console.error('idle client error', err.message, err.stack)
 	});
