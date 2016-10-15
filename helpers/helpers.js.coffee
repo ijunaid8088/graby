@@ -1,8 +1,9 @@
+moment = require 'moment'
 module.exports =
   _process: (data) ->
     # console.log(data.schedule)
-    # console.log _handle_days(data.schedule)
-    console.log data.from_date
+    console.log moment(data.from_date).valueOf()
+    # console.log data.from_date
     from_date = data.from_date
     to_date = data.to_date
     interval = data.interval
