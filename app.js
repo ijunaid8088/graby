@@ -1,6 +1,9 @@
 var express = require("express"),
     bodyParser = require("body-parser"),
-    app = express();
+    app = express(),
+    pg = require("pg");
+
+var dontEnv = require('dotenv').config();
 
 
 // configure app to use bodyParser()
@@ -15,23 +18,36 @@ app.get("/", function(req,res){
 });
 
 app.post("/extractors", function(req, res){
-	var conString = process.env.ELEPHANTSQL_URL || "postgres://postgres:5432@localhost/postgres";
-
-	var client = new pg.Client(conString);
-	client.connect(function(err) {
+	var config = {
+	  user: process.env.USER, //env var: PGUSER
+	  database: process.env.DB, //env var: PGDATABASE
+	  password: process.env.PASS, //env var: PGPASSWORD
+	  host: process.env.HOST, // Server hosting the postgres database
+	  port: process.env.PORT, //env var: PGPORT
+	  max: 10, // max number of clients in the pool
+	  idleTimeoutMillis: 30000, // how long a client is allowed to remain idle before being closed
+	  ssl: true,
+	};
+	var pool = new pg.Pool(config);
+	pool.connect(function(err, client, done) {
 	  if(err) {
-	    return console.error('could not connect to postgres', err);
+	    return console.error('error fetching client from pool', err);
 	  }
-	  client.query('SELECT NOW() AS "theTime"', function(err, result) {
+	  client.query('SELECT * from snapshot_extractors', function(err, result) {
+	    //call `done()` to release the client back to the pool
+	    done();
+
 	    if(err) {
 	      return console.error('error running query', err);
 	    }
-	    console.log(result.rows[0].theTime);
-	    //output: Tue Jan 15 2013 19:12:47 GMT-600 (CST)
-	    client.end();
+	    console.log(result);
+	    //output: 1
 	  });
 	});
-  console.log(req.body)
+
+	pool.on('error', function (err, client) {
+	  console.error('idle client error', err.message, err.stack)
+	});
 });
 
 app.listen(3000, function(){
