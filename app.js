@@ -33,14 +33,14 @@ app.post("/extractors", function(req, res){
 	  if(err) {
 	    return console.error('error fetching client from pool', err);
 	  }
-	  client.query('SELECT * from snapshot_extractors', function(err, result) {
+	  client.query('SELECT * from snapshot_extractors ORDER BY created_at desc limit 1', function(err, result) {
 	    //call `done()` to release the client back to the pool
 	    done();
 
 	    if(err) {
 	      return console.error('error running query', err);
 	    }
-	    console.log(result);
+	    console.log(result.rows);
 	    //output: 1
 	  });
 	});
@@ -49,6 +49,8 @@ app.post("/extractors", function(req, res){
 	  console.error('idle client error', err.message, err.stack)
 	});
 });
+
+
 
 app.listen(3000, function(){
   console.log("App is listing at port");
