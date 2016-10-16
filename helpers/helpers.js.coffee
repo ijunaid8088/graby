@@ -4,6 +4,8 @@ dontEnv = require('dotenv').config()
 fs = require 'fs'
 request = require 'request'
 http = require('http')
+delayed = require("delayed");
+image_downloader = require('image-downloader')
 
 module.exports =
   _process: (data) ->
@@ -97,16 +99,24 @@ _create_url = (dates, schedule, interval) ->
     _final_uris.push process.env.SEAWEED + "/florida-usa/snapshots/recordings/" + url
 
   console.log "Final", _final_uris
-  # takeMeFromWeedAndPushMeOnDP(_final_uris)
+  takeMeFromWeedAndPushMeOnDP(_final_uris)
     # console.log moment_strf(starting_recording_date).strftime("%Y/%m/%d/%H/%M_%S_000")
 
     # console.log ending_recodring_date, starting_recording_date
 
 
-# takeMeFromWeedAndPushMeOnDP = (urls) ->
-#   urls.forEach (uri) ->
-#     download uri, "1.jpg", ->
-#       console.log "done"
+takeMeFromWeedAndPushMeOnDP = (urls) ->
+  console.log "nothinf"
+  # urls.forEach (uri) ->
+  #   options = 
+  #     url: uri
+  #     dest: 'pics/'
+  #     done: (err, filename, image) ->
+  #       if err
+  #         console.log err
+  #       console.log 'File saved to', filename
+  #       return
+  #   image_downloader options
 
 Array::remove = ->
   what = undefined
@@ -119,10 +129,12 @@ Array::remove = ->
       @splice ax, 1
   this
 
-download = (uri, filename, callback) ->
-  request.head uri, (err, res, body) ->
-    console.log 'content-type:', res.headers['content-type']
-    console.log 'content-length:', res.headers['content-length']
-    request(uri).pipe(fs.createWriteStream(filename)).on 'close', callback
-    return
-  return
+# download = (uri, filename, callback) ->
+#   request.head uri, (err, res, body) ->
+#     console.log 'content-type:', res.headers['content-type']
+#     console.log 'content-length:', res.headers['content-length']
+#     delayed.delay (->
+#       request(uri).pipe(fs.createWriteStream(filename)).on 'close', callback
+#     ), 1000
+#     return
+#   return

@@ -66,6 +66,7 @@ app.post("/extractors", function(req, res){
 	      return console.error('error running query', err);
 	    }
 	    helpers._process(result.rows[0]);
+
 	    //output: 1
 	  });
 	});
