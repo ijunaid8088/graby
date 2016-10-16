@@ -9,6 +9,9 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "engines": {
+    "node": "4.4.3"
+  },
   "dependencies": {
     "body-parser": "^1.15.0",
     "coffee-script": "^1.11.1",
