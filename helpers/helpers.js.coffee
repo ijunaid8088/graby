@@ -1,5 +1,6 @@
 moment = require 'moment'
 moment_strf = require('moment-strftime')
+dontEnv = require('dotenv').config()
 
 module.exports =
   _process: (data) ->
@@ -59,6 +60,7 @@ _valid_dates = (dates, days) ->
 _create_url = (dates, schedule, interval) ->
   interval = 1
   _urls = new Array
+  _final_uris = new Array
   date_index = 0
   start_val = 0
   end_val = 1
@@ -80,11 +82,22 @@ _create_url = (dates, schedule, interval) ->
     ending_recodring_date.setHours(ending_hour);
     ending_recodring_date.setMinutes(ending_minutes);
     ending_recodring_date.setSeconds(0);
-    # for i in [starting_recording_date...ending_recodring_date] by interval
-    #   console.log i
-    
+    looping_time_in_sec = ending_recodring_date - starting_recording_date
+    for i in [0...looping_time_in_sec] by interval
+      if starting_recording_date <= ending_recodring_date
+        ending_url = moment_strf(starting_recording_date).strftime("%Y/%m/%d/%H/%M_%S_000.jpg")
+        _urls.push ending_url
+        starting_recording_date.setSeconds(starting_recording_date.getSeconds() + interval)
+      # ...
+  _urls.forEach (url) ->
+    _final_uris.push process.env.SEAWEED + "/florida-usa/snapshots/recordings/" + url
 
-    console.log date, starting_recording_date, ending_recodring_date
+  console.log _final_uris
+    # console.log moment_strf(starting_recording_date).strftime("%Y/%m/%d/%H/%M_%S_000")
+
+    # console.log ending_recodring_date, starting_recording_date
+
+
 
 
 Array::remove = ->
