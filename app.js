@@ -21,6 +21,7 @@ app.get("/", function(req,res){
 });
 
 app.post("/extractors", function(req, res){
+	var full_data;
 	var config = {
 	  user: process.env.USER, //env var: PGUSER
 	  database: process.env.DB, //env var: PGDATABASE

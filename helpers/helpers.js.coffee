@@ -52,7 +52,7 @@ _valid_dates = (dates, days) ->
         validDates[index] = date
         index += 1
       else
-        console.log "Am valid day", moment_strf(date).strftime("%A")
+        #dont do anything here
   validDates
 
 Array::remove = ->
