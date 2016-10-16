@@ -21,6 +21,7 @@
     "ejs": "^2.4.1",
     "express": "^4.13.4",
     "fs": "0.0.1-security",
+    "image-downloader": "^2.0.0",
     "moment": "^2.15.1",
     "moment-strftime": "^0.1.5",
     "pg": "^6.1.0",
