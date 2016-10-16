@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>IamExtactor</title>
+  <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+<body>
+<table class="table table-striped">
+  <thead class="thead-default">
+    <tr>
+      <th>#</th>
+      <th>From Date</th>
+      <th>To Date</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+	<% for(var i=0; i < list.length; i++) { %>
+    <tr>
+      <th scope="row"><%= list[i].id %></th>
+      <td><%= list[i].from_date %></td>
+      <td><%= list[i].to_date %></td>
+      <td><%= list[i].status %></td>
+    </tr>
+    <% } %>
+  </tbody>
+</table>
+</body>
+</html>

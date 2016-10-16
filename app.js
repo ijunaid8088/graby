@@ -2,7 +2,8 @@ var express = require("express"),
     bodyParser = require("body-parser"),
     app = express(),
     pg = require("pg"),
-    coffee = require('coffee-script/register');
+    coffee = require('coffee-script/register'),
+    delayed = require("delayed");
 
 var helpers = new require('./helpers/helpers.js.coffee')
 
@@ -16,22 +17,42 @@ app.use(bodyParser.json());
 app.use(require("connect-assets")());
 app.set("view engine", "ejs");
 
+var config = {
+  user: process.env.USER, //env var: PGUSER
+  database: process.env.DB, //env var: PGDATABASE
+  password: process.env.PASS, //env var: PGPASSWORD
+  host: process.env.HOST, // Server hosting the postgres database
+  port: process.env.PORT, //env var: PGPORT
+  max: 10, // max number of clients in the pool
+  idleTimeoutMillis: 30000, // how long a client is allowed to remain idle before being closed
+  ssl: true,
+};
+
+app.get("/extractors_list", function(req, res){
+	var pool = new pg.Pool(config);
+	pool.connect(function(err, client, done) {
+	  if(err) {
+	    return console.error('error fetching client from pool', err);
+	  }
+	  client.query('SELECT * from snapshot_extractors ORDER BY created_at desc', function(err, result) {
+	    //call `done()` to release the client back to the pool
+	    done();
+
+	    if(err) {
+	      return console.error('error running query', err);
+	    }
+	  console.log(result.rows)
+		res.render("extractors_list", {list: result.rows})
+	    //output: 1
+	  });
+	});
+});
+
 app.get("/", function(req,res){
   res.render("index")
 });
 
 app.post("/extractors", function(req, res){
-	var full_data;
-	var config = {
-	  user: process.env.USER, //env var: PGUSER
-	  database: process.env.DB, //env var: PGDATABASE
-	  password: process.env.PASS, //env var: PGPASSWORD
-	  host: process.env.HOST, // Server hosting the postgres database
-	  port: process.env.PORT, //env var: PGPORT
-	  max: 10, // max number of clients in the pool
-	  idleTimeoutMillis: 30000, // how long a client is allowed to remain idle before being closed
-	  ssl: true,
-	};
 	var pool = new pg.Pool(config);
 	pool.connect(function(err, client, done) {
 	  if(err) {

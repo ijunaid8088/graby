@@ -5,14 +5,14 @@ module.exports =
   _process: (data) ->
     # console.log "Start Date - End Date"
     # console.log data.from_date, data.to_date
-    # console.log "Schedule"
-    # console.log data.schedule
+    console.log "Schedule"
+    console.log data.schedule
     # console.log "Total Valid days"
     # console.log _total_dates(data.from_date, data.to_date)
     # console.log "Recording Days"
     # console.log _handle_days(data.schedule)
     # console.log "Recording Dates"
-    # console.log _valid_dates(_total_dates(data.from_date, data.to_date), _handle_days(data.schedule))
+    console.log _valid_dates(_total_dates(data.from_date, data.to_date), _handle_days(data.schedule))
     # console.log moment_strf(data.from_date).strftime("%A")
     # console.log _total_dates(data.from_date, data.to_date)
     valid_recording_dates = _valid_dates(_total_dates(data.from_date, data.to_date), _handle_days(data.schedule))
