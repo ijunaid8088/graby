@@ -1,6 +1,9 @@
 moment = require 'moment'
 moment_strf = require('moment-strftime')
 dontEnv = require('dotenv').config()
+fs = require 'fs'
+request = require 'request'
+http = require('http')
 
 module.exports =
   _process: (data) ->
@@ -8,12 +11,12 @@ module.exports =
     # console.log data.from_date, data.to_date
     console.log "Schedule"
     console.log data.schedule
-    # console.log "Total Valid days"
-    # console.log _total_dates(data.from_date, data.to_date)
-    # console.log "Recording Days"
-    # console.log _handle_days(data.schedule)
-    # console.log "Recording Dates"
-    # console.log _valid_dates(_total_dates(data.from_date, data.to_date), _handle_days(data.schedule))
+    console.log "Total Valid days"
+    console.log _total_dates(data.from_date, data.to_date)
+    console.log "Recording Days"
+    console.log _handle_days(data.schedule)
+    console.log "Recording Dates"
+    console.log _valid_dates(_total_dates(data.from_date, data.to_date), _handle_days(data.schedule))
     # console.log moment_strf(data.from_date).strftime("%A")
     # console.log _total_dates(data.from_date, data.to_date)
     valid_recording_dates = _valid_dates(_total_dates(data.from_date, data.to_date), _handle_days(data.schedule))
@@ -83,6 +86,7 @@ _create_url = (dates, schedule, interval) ->
     ending_recodring_date.setMinutes(ending_minutes);
     ending_recodring_date.setSeconds(0);
     looping_time_in_sec = ending_recodring_date - starting_recording_date
+    console.log ending_recodring_date, starting_recording_date
     for i in [0...looping_time_in_sec] by interval
       if starting_recording_date <= ending_recodring_date
         ending_url = moment_strf(starting_recording_date).strftime("%Y/%m/%d/%H/%M_%S_000.jpg")
@@ -92,13 +96,17 @@ _create_url = (dates, schedule, interval) ->
   _urls.forEach (url) ->
     _final_uris.push process.env.SEAWEED + "/florida-usa/snapshots/recordings/" + url
 
-  console.log _final_uris
+  console.log "Final", _final_uris
+  # takeMeFromWeedAndPushMeOnDP(_final_uris)
     # console.log moment_strf(starting_recording_date).strftime("%Y/%m/%d/%H/%M_%S_000")
 
     # console.log ending_recodring_date, starting_recording_date
 
 
-
+# takeMeFromWeedAndPushMeOnDP = (urls) ->
+#   urls.forEach (uri) ->
+#     download uri, "1.jpg", ->
+#       console.log "done"
 
 Array::remove = ->
   what = undefined
@@ -111,6 +119,10 @@ Array::remove = ->
       @splice ax, 1
   this
 
-
-pad = (n) ->
-  if n < 10 then '0' + n else n
+download = (uri, filename, callback) ->
+  request.head uri, (err, res, body) ->
+    console.log 'content-type:', res.headers['content-type']
+    console.log 'content-length:', res.headers['content-length']
+    request(uri).pipe(fs.createWriteStream(filename)).on 'close', callback
+    return
+  return
