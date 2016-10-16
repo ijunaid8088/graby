@@ -57,12 +57,11 @@ _valid_dates = (dates, days) ->
   validDates
 
 _create_url = (dates, schedule, interval) ->
+  interval = 1
   _urls = new Array
   date_index = 0
   start_val = 0
   end_val = 1
-  _0url_pattern = "http://138.201.13.150:8888/roman-cam/snapshots/recordings/2016/09/13/0"
-  _url_pattern = "http://138.201.13.150:8888/roman-cam/snapshots/snapmail/2016/09/13/"
   dates.forEach (date) ->
     # times = schedule[moment_strf(date).strftime("%A")]
     time_range = schedule[moment_strf(date).strftime("%A")]
@@ -81,12 +80,10 @@ _create_url = (dates, schedule, interval) ->
     ending_recodring_date.setHours(ending_hour);
     ending_recodring_date.setMinutes(ending_minutes);
     ending_recodring_date.setSeconds(0);
-    # ending_hour = parseInt(end_time[start_val], 10)
-    # if starting_hour < 10
-    #   for i in [starting_hour...ending_hour] by interval
-        
-      
-    #   # ...
+    # for i in [starting_recording_date...ending_recodring_date] by interval
+    #   console.log i
+    
+
     console.log date, starting_recording_date, ending_recodring_date
 
 
