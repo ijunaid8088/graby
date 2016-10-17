@@ -9,8 +9,8 @@ image_downloader = require('image-downloader')
 
 module.exports =
   _process: (data) ->
-    # console.log "Start Date - End Date"
-    # console.log data.from_date, data.to_date
+    console.log "Start Date - End Date"
+    console.log data.from_date, data.to_date
     console.log "Schedule"
     console.log data.schedule
     console.log "Total Valid days"
@@ -88,18 +88,19 @@ _create_url = (dates, schedule, interval) ->
     ending_recodring_date.setMinutes(ending_minutes);
     ending_recodring_date.setSeconds(0);
     looping_time_in_sec = ending_recodring_date - starting_recording_date
-    console.log ending_recodring_date, starting_recording_date
-    for i in [0...looping_time_in_sec] by interval
-      if starting_recording_date <= ending_recodring_date
-        ending_url = moment_strf(starting_recording_date).strftime("%Y/%m/%d/%H/%M_%S_000.jpg")
-        _urls.push ending_url
-        starting_recording_date.setSeconds(starting_recording_date.getSeconds() + interval)
+    console.log starting_recording_date, ending_recodring_date
+    # for i in [0...looping_time_in_sec] by interval
+    #   if starting_recording_date <= ending_recodring_date
+    #     ending_url = moment_strf(starting_recording_date).strftime("%Y/%m/%d/%H/%M_%S_000.jpg")
+    #     _urls.push ending_url
+    #     starting_recording_date.setSeconds(starting_recording_date.getSeconds() + interval)
+        # console.log ending_recodring_date, starting_recording_date
       # ...
-  _urls.forEach (url) ->
-    _final_uris.push process.env.SEAWEED + "/florida-usa/snapshots/recordings/" + url
+  # _urls.forEach (url) ->
+  #   _final_uris.push process.env.SEAWEED + "/florida-usa/snapshots/recordings/" + url
 
-  console.log "Final", _final_uris
-  takeMeFromWeedAndPushMeOnDP(_final_uris)
+  # console.log "Final", _final_uris
+  # takeMeFromWeedAndPushMeOnDP(_final_uris)
     # console.log moment_strf(starting_recording_date).strftime("%Y/%m/%d/%H/%M_%S_000")
 
     # console.log ending_recodring_date, starting_recording_date
